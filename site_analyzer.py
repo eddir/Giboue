@@ -56,8 +56,8 @@ class Site:
                 self.anxiety("*Обнаружена неисправность*\n\n_Ошибки в алгоритме_")
 
     def anxiety(self, message):
-        if os.path.isfile("last-report.txt"):
-            with open("last-report.txt", "r") as file:
+        if os.path.isfile(Main.get_path() + "/last-report.txt"):
+            with open(Main.get_path() + "/last-report.txt", "r") as file:
                 last = file.read()
                 if last.isdigit():
                     last = int(last)
@@ -66,7 +66,7 @@ class Site:
                 if (time.time() - last < 3600 * 2):
                     file.close()
                     sys.exit()
-        with open("last-report.txt", "w") as f:
+        with open(Main.get_path() + "/last-report.txt", "w") as f:
             f.write(str(round(time.time())))
             f.close()
         self.telegram_send(message)
