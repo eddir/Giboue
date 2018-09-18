@@ -4,7 +4,6 @@ sites:
     check-ping: true
     check-content: true
     check-errors: true
-    check-visitors: true
     report: "10:00"
     google-analytics:
       table-id: "ga:TABLE_ID"
