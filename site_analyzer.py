@@ -1,6 +1,8 @@
 import os
 import sys
 from datetime import date, timedelta
+import time
+from pprint import pprint
 
 import requests
 import telegram as telegram
@@ -39,34 +41,49 @@ class Site:
 
     def check_ping(self):
         if self.response.status_code != 200:
-            self.telegram_send(
+            self.anxiety(
                 "*Обнаружена неисправность*\n\n_Сайт не отвечает. Код HTTP ошибки:_ " +
                 str(self.response.status_code))
-            self.telegram_report()
 
     def check_content(self):
         if len(self.response.content) < 40000:
-            self.telegram_send("*Обнаружена неисправность*\n\n_Подозрительный вывод на сайте_")
-            self.telegram_report()
+            self.anxiety("*Обнаружена неисправность*\n\n_Подозрительный вывод на сайте_")
 
     def check_errors(self):
         content = self.response.content.decode('UTF-8')
         for word in self.prohibited_words:
             if content.find(word) != -1:
-                self.telegram_send("*Обнаружена неисправность*\n\n_Ошибки в алгоритме_" + word)
-                self.telegram_report()
+                self.anxiety("*Обнаружена неисправность*\n\n_Ошибки в алгоритме_" + word)
+
+    def anxiety(self, message):
+        if os.path.isfile("last-report.txt"):
+            with open("last-report.txt", "r") as file:
+                last = file.read()
+                if last.isdigit():
+                    last = int(last)
+                else:
+                    last = 0
+                if (time.time() - last < 3600 * 2):
+                    file.close()
+                    sys.exit()
+        with open("last-report.txt", "w") as f:
+            f.write(str(round(time.time())))
+            f.close()
+        self.telegram_send(message)
+        self.telegram_report()
+        sys.exit()
 
     def telegram_report(self):
         document = open("report.txt", "wb")
-        document.write(self.response.content)
-        document.close()
-        document = open("report.txt", "rb")
-        self.bot.send_document(chat_id=self.cfg["telegram"]["group"],
-                               document=document,
-                               filename="Crash_" + self.cfg["address"] + "_" + date.today().strftime('%y%m%d') + ".txt")
-        document.close()
-        os.remove("report.txt")
-        sys.exit()
+        if len(self.response.content) > 0:
+            document.write(self.response.content)
+            document.close()
+            document = open("report.txt", "rb")
+            self.bot.send_document(chat_id=self.cfg["telegram"]["group"],
+                                   document=document,
+                                   filename="Crash_" + self.cfg["address"] + "_" + date.today().strftime('%y%m%d') + ".txt")
+            document.close()
+            os.remove("report.txt")
 
     def telegram_send(self, message):
         print(message)
