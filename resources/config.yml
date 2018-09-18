@@ -1,0 +1,15 @@
+sites:
+  -
+    address: "google.com"
+    check-ping: true
+    check-content: true
+    check-errors: true
+    check-visitors: true
+    report: "10:00"
+    google-analytics:
+      table-id: "ga:TABLE_ID"
+      from: "14daysAgo"
+      to: "1daysAgo"
+    telegram:
+      token: "value"
+      group: 1
