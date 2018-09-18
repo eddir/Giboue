@@ -53,7 +53,7 @@ class Site:
         content = self.response.content.decode('UTF-8')
         for word in self.prohibited_words:
             if content.find(word) != -1:
-                self.anxiety("*Обнаружена неисправность*\n\n_Ошибки в алгоритме_" + word)
+                self.anxiety("*Обнаружена неисправность*\n\n_Ошибки в алгоритме_")
 
     def anxiety(self, message):
         if os.path.isfile("last-report.txt"):
