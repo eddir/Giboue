@@ -86,7 +86,6 @@ class Site:
         sys.exit()
 
     def telegram_report(self):
-        return True
         document = open("report.txt", "wb")
         if len(self.response.content) > 0:
             document.write(self.response.content)
@@ -95,12 +94,12 @@ class Site:
             self.bot.send_document(chat_id=self.cfg["telegram"]["group"],
                                    document=document,
                                    filename="Crash_" + self.cfg["address"] + "_" + date.today().strftime('%y%m%d') + ".txt")
-            document.close()
-            os.remove("report.txt")
+        document.close()
+        os.remove("report.txt")
 
     def telegram_send(self, message):
         print(message)
-        #self.bot.send_message(chat_id=self.cfg["telegram"]["group"], text=message, parse_mode="Markdown")
+        self.bot.send_message(chat_id=self.cfg["telegram"]["group"], text=message, parse_mode="Markdown")
 
     def generate_report(self):
         yesterday = (date.today() - timedelta(1)).strftime('%y%m%d')
