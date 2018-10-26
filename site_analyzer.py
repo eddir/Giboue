@@ -57,14 +57,13 @@ class Site:
 
     def check_performance(self):
         if os.path.isfile(Main.get_path() + "/last-report.txt"):
-            with open(Main.get_path() + "/last-report.txt", "rw") as file:
+            with open(Main.get_path() + "/last-report.txt", "r+") as file:
                 last = file.read()
                 if last.isdigit():
                     last = int(last)
                 else:
                     last = 0
-                if (time.time() - last < 3):
-                    file.write(0)
+                if round(time.time()) - last < 3 * 60:
                     self.telegram_send('Сайт вновь доступен')
                 file.close()
 
@@ -87,6 +86,7 @@ class Site:
         sys.exit()
 
     def telegram_report(self):
+        return True
         document = open("report.txt", "wb")
         if len(self.response.content) > 0:
             document.write(self.response.content)
@@ -100,7 +100,7 @@ class Site:
 
     def telegram_send(self, message):
         print(message)
-        self.bot.send_message(chat_id=self.cfg["telegram"]["group"], text=message, parse_mode="Markdown")
+        #self.bot.send_message(chat_id=self.cfg["telegram"]["group"], text=message, parse_mode="Markdown")
 
     def generate_report(self):
         yesterday = (date.today() - timedelta(1)).strftime('%y%m%d')

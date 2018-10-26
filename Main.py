@@ -26,12 +26,15 @@ if __name__ == "__main__":
 
     for sc in cfg['sites']:
         site = site_analyzer.Site(sc)
-        if sc["check-ping"]:
-            site.check_ping()
-        if sc["check-content"]:
-            site.check_content()
-        if sc["check-errors"]:
-            site.check_errors()
-        site.check_performance()
-        if sc["report"] == str(now.hour) + ":" + str(now.minute):
-            site.generate_report()
+        try:
+            if sc["check-ping"]:
+                site.check_ping()
+            if sc["check-content"]:
+                site.check_content()
+            if sc["check-errors"]:
+                site.check_errors()
+            site.check_performance()
+            if sc["report"] == str(now.hour) + ":" + str(now.minute):
+                site.generate_report()
+        except:
+            site.anxiety("*Обнаружена прочая неисправность на сайте " + sc["address"] + "*")
