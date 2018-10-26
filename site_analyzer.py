@@ -57,15 +57,16 @@ class Site:
 
     def check_performance(self):
         if os.path.isfile(Main.get_path() + "/last-report.txt"):
-            with open(Main.get_path() + "/last-report.txt", "r") as file:
+            with open(Main.get_path() + "/last-report.txt", "rw") as file:
                 last = file.read()
                 if last.isdigit():
                     last = int(last)
                 else:
                     last = 0
                 if (time.time() - last < 3):
-                    file.close()
+                    file.write(0)
                     self.telegram_send('Сайт вновь доступен')
+                file.close()
 
     def anxiety(self, message):
         if os.path.isfile(Main.get_path() + "/last-report.txt"):
