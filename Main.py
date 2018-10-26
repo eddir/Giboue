@@ -32,5 +32,6 @@ if __name__ == "__main__":
             site.check_content()
         if sc["check-errors"]:
             site.check_errors()
+        site.check_performance()
         if sc["report"] == str(now.hour) + ":" + str(now.minute):
             site.generate_report()

@@ -42,7 +42,7 @@ class Site:
     def check_ping(self):
         if self.response.status_code != 200:
             self.anxiety(
-                "*Обнаружена неисправность*\n\n_Сайт не отвечает. Код HTTP ошибки:_ " +
+                "*Обнаружена неисправность*\n\n_Сайт не отвечает ("+ self.cfg["address"] + "). Код HTTP ошибки:_ " +
                 str(self.response.status_code))
 
     def check_content(self):
@@ -54,6 +54,18 @@ class Site:
         for word in self.prohibited_words:
             if content.find(word) != -1:
                 self.anxiety("*Обнаружена неисправность*\n\n_Ошибки в алгоритме_")
+
+    def check_performance(self):
+        if os.path.isfile(Main.get_path() + "/last-report.txt"):
+            with open(Main.get_path() + "/last-report.txt", "r") as file:
+                last = file.read()
+                if last.isdigit():
+                    last = int(last)
+                else:
+                    last = 0
+                if (time.time() - last < 3):
+                    file.close()
+                    self.telegram_send('Сайт вновь доступен')
 
     def anxiety(self, message):
         if os.path.isfile(Main.get_path() + "/last-report.txt"):
