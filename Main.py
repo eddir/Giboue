@@ -36,5 +36,5 @@ if __name__ == "__main__":
             site.check_performance()
             if sc["report"] == str(now.hour) + ":" + str(now.minute):
                 site.generate_report()
-        except:
-            site.anxiety("*Обнаружена прочая неисправность на сайте " + sc["address"] + "*")
+        except Exception as e:
+            site.anxiety("*Обнаружена прочая неисправность на сайте " + sc["address"] + "*\n\n_" + str(e) + "_")
