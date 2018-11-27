@@ -1,0 +1,7 @@
+.idea
+venv
+*.p12
+__pycache__/
+client_secrets.json
+config.yml
+last-report.txt
