@@ -38,3 +38,5 @@ if __name__ == "__main__":
                 site.generate_report()
         except Exception as e:
             site.anxiety("*Обнаружена прочая неисправность на сайте " + sc["address"] + "*\n\n_" + str(e) + "_")
+        except:
+            site.anxiety("*Обнаружена неизвестная ошибка при мониторинге!*")
