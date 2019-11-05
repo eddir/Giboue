@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 from datetime import date, timedelta
@@ -36,7 +39,7 @@ class Site:
             key_file_location=Main.get_path() + '/client_secrets.json'
         )
         self.bot = telegram.Bot(token=config["telegram"]["token"])
-        self.response = requests.get(self.cfg["address"])
+        self.response = requests.get(self.cfg["address"], verify=self.cfg['check-ssl'])
         self.prohibited_words = ("Warning", "PHP", "MYSQL")
 
     def check_ping(self):
@@ -50,7 +53,7 @@ class Site:
             self.anxiety("*Обнаружена неисправность*\n\n_Подозрительный вывод на сайте_")
 
     def check_errors(self):
-        content = self.response.content.decode('UTF-8')
+        content = self.response.content.decode('utf8')
         for word in self.prohibited_words:
             if content.find(word) != -1:
                 self.anxiety("*Обнаружена неисправность*\n\n_Ошибки в алгоритме_")

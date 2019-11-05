@@ -1,8 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import inspect
 import os
 import sys
 from datetime import datetime
 from shutil import copyfile
+import traceback
 
 import yaml
 
@@ -37,6 +41,6 @@ if __name__ == "__main__":
             if sc["report"] == str(now.hour) + ":" + str(now.minute):
                 site.generate_report()
         except Exception as e:
-            site.anxiety("*Обнаружена прочая неисправность на сайте " + sc["address"] + "*\n\n_" + str(e) + "_")
+            site.anxiety("*Обнаружена прочая неисправность на сайте " + sc["address"] + "*\n\n_" + str(e) + "_" + "\n\n" + ''.join(traceback.format_exception(etype=type(e), value=e, tb=e.__traceback__)))
         except:
             site.anxiety("*Обнаружена неизвестная ошибка при мониторинге!*")
