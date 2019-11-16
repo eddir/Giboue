@@ -1,6 +1,7 @@
 .idea
 venv
 *.p12
+*.pyc
 __pycache__/
 client_secrets.json
 config.yml

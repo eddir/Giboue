@@ -29,8 +29,8 @@ if __name__ == "__main__":
     now = datetime.now()
 
     for sc in cfg['sites']:
-        site = site_analyzer.Site(sc)
         try:
+            site = site_analyzer.Site(sc)
             if sc["check-ping"]:
                 site.check_ping()
             if sc["check-content"]:

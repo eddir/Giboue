@@ -39,7 +39,7 @@ class Site:
             key_file_location=Main.get_path() + '/client_secrets.json'
         )
         self.bot = telegram.Bot(token=config["telegram"]["token"])
-        self.response = requests.get(self.cfg["address"], verify=self.cfg['check-ssl'])
+        self.response = requests.get(self.cfg["address"], verify=self.cfg['check-ssl'], timeout=10)
         self.prohibited_words = ("Warning", "PHP", "MYSQL")
 
     def check_ping(self):
